@@ -1,5 +1,6 @@
 package ru.homework.Pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,33 +51,37 @@ public class MortgagePage extends BasePage {
         waitForElement(anchor);
     }
 
-    public void inputEstateCost(int value) {
+    @Step("Вводим стоимость недвижимости {value}")
+    public void inputEstateCost(String value) {
         driver.switchTo().frame(0);
         waitForElement(estateCost);
         estateCost.clear();
-        estateCost.sendKeys(Integer.toString(value));
+        estateCost.sendKeys(value);
         driver.switchTo().defaultContent();
     }
 
-    public void inputInitialFee(int value) {
+    @Step("Вводим первоначальный взнос {value}")
+    public void inputInitialFee(String value) {
         driver.switchTo().frame(0);
         waitForElement(initialFee);
         oldTextValue = initialFee.getAttribute("value");
         waitToChangeValueOnElement(initialFee, oldTextValue);
         initialFee.clear();
-        initialFee.sendKeys(Integer.toString(value));
+        initialFee.sendKeys(value);
         driver.switchTo().defaultContent();
     }
 
-    public void inputCreditTerm(int value) {
+    @Step("Вводим срок кредита {value}")
+    public void inputCreditTerm(String value) {
         driver.switchTo().frame(0);
         waitForElement(creditTerm);
         creditTerm.clear();
-        creditTerm.sendKeys(Integer.toString(value));
-        waitToEqualValueOnElement(creditTerm, Integer.toString(value));
+        creditTerm.sendKeys(value);
+        waitToEqualValueOnElement(creditTerm, value);
         driver.switchTo().defaultContent();
     }
 
+    @Step("Кликаем на radiobutton Есть зарплатная карта Сбербанка")
     public void switchHaveCardSberbank() {
         driver.switchTo().frame(0);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();"
@@ -85,60 +90,54 @@ public class MortgagePage extends BasePage {
         driver.switchTo().defaultContent();
     }
 
+    @Step("Ожидаем появление пункта Есть возможность подтвердить справкой")
     public void waitConfirmPaper() {
         driver.switchTo().frame(0);
         waitForElement(switcherConfimPaper);
         driver.switchTo().defaultContent();
     }
 
+    @Step("Кликаем на radiobutton Молодая семья")
     public void switchYoungFamily() {
         driver.switchTo().frame(0);
         switcherYoungFamily.click();
         driver.switchTo().defaultContent();
     }
 
-    private int textToInt(String text) {
-        StringBuilder answer = new StringBuilder();
-        for (char ch : text.toCharArray()) {
-            if ( Character.isLetterOrDigit(ch) ) {
-                answer.append(ch);
-            }
-        }
-        return Integer.parseInt(answer.toString());
-    }
-
-    public int getAmountOfCredit() {
+    @Step("Получаем значение сумма кредита")
+    public String getAmountOfCredit() {
         driver.switchTo().frame(0);
         waitToStopChangeElement(amountOfCredit);
-        int answer = textToInt(amountOfCredit.getText());
+        String answer = amountOfCredit.getText();
         driver.switchTo().defaultContent();
         return answer;
     }
 
-    public int getMonthlyPayment() {
+    @Step("Получаем значение ежемесячный платеж")
+    public String getMonthlyPayment() {
         driver.switchTo().frame(0);
         waitToStopChangeElement(monthlyPayment);
-        int answer = textToInt(monthlyPayment.getText());
+        String answer = monthlyPayment.getText();
         driver.switchTo().defaultContent();
         return answer;
     }
 
-    public int getRequiredIncome() {
+    @Step("Получаем значение необходимый доход")
+    public String getRequiredIncome() {
         driver.switchTo().frame(0);
         waitToStopChangeElement(requiredIncome);
-        int answer = textToInt(requiredIncome.getText());
+        String answer = requiredIncome.getText();
         driver.switchTo().defaultContent();
         return answer;
     }
 
-    public double getRate() {
+    @Step("Получаем значение процентная ставка")
+    public String getRate() {
         driver.switchTo().frame(0);
         waitToStopChangeElement(rate);
         String str = rate.getText();
-        str = str.replaceAll(",", ".");
-        double answer = Double.parseDouble(str.substring(0, str.length() - 2));
         driver.switchTo().defaultContent();
-        return answer;
+        return str;
     }
 
 

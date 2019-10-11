@@ -24,14 +24,14 @@ public class MainPage extends BasePage {
         waitForElement(anchor);
     }
 
-    @Step("Click to on Top Main Menu")
+    @Step("Кликаем главное меню по пункту {nameMenu}")
     public WebElement clickToMainMenu(String nameMenu) {
         WebElement paragraphMainMenu = driver.findElement(By.xpath(String.format(mainMenuXpath, nameMenu)));
         waitAndClickElement(paragraphMainMenu);
         return paragraphMainMenu;
     }
 
-    @Step("Click to on Top SubMenu")
+    @Step("Кликаем в подменю по пункту {nameSubMenu}")
     public WebElement clickToSubMainMenu(String nameSubMenu) {
         WebElement paragraphMainMenu = driver.findElement(By.xpath(String.format(subMainMenuXpath, nameSubMenu)));
         waitAndClickElement(paragraphMainMenu);

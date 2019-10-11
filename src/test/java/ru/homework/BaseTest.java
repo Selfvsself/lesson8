@@ -1,7 +1,7 @@
 package ru.homework;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Properties;
@@ -11,15 +11,15 @@ public class BaseTest {
     public static String baseUrl;
     public static Properties properties = TestProperties.getInstance().getProperties();
 
-    @BeforeClass
+    @Before
     public static void setUp() {
         driver = Init.getDriver();
         baseUrl = String.valueOf(properties.get("baseUrl"));
     }
 
-    @AfterClass
+    @After
     public static void close() {
-        driver.quit();
+        driver.close();
     }
 
 }

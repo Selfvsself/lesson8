@@ -33,6 +33,7 @@ selenium
 
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.homework.Pages.MainPage;
 import ru.homework.Pages.MortgagePage;
@@ -40,25 +41,24 @@ import ru.homework.Pages.MortgagePage;
 public class SberbankTest {
 
     @Test
-    @DisplayName("Test sberbank mortgage calculation")
+    @Ignore
+    @DisplayName("Тест для домашнего задания")
     public void testSberbank() {
         MainPage mainPage = new MainPage();
         mainPage.clickToMainMenu("Ипотека");
         mainPage.clickToSubMainMenu("Ипотека на готовое жильё");
 
         MortgagePage mortgagePage = new MortgagePage();
-        mortgagePage.inputEstateCost(5180000);
-        mortgagePage.inputInitialFee(3058000);
-        mortgagePage.inputCreditTerm(30);
+        mortgagePage.inputEstateCost("5180000");
+        mortgagePage.inputInitialFee("3058000");
+        mortgagePage.inputCreditTerm("30");
         mortgagePage.switchHaveCardSberbank();
         mortgagePage.waitConfirmPaper();
         mortgagePage.switchYoungFamily();
 
-        Assert.assertEquals(mortgagePage.getAmountOfCredit(), 2122000);
-        //Assert.assertEquals(mortgagePage.getMonthlyPayment(), 18937);
-        //Assert.assertEquals(mortgagePage.getRequiredIncome(), 31561);
-        //Assert.assertEquals(mortgagePage.getRate(), 11);
+        Assert.assertEquals(mortgagePage.getAmountOfCredit(), "2 122 000 \u20BD");
+        Assert.assertEquals(mortgagePage.getMonthlyPayment(), "17 998 \u20BD");
+        Assert.assertEquals(mortgagePage.getRequiredIncome(), "29 997 \u20BD");
+        Assert.assertEquals(mortgagePage.getRate(), "11%");
     }
-
-
 }
