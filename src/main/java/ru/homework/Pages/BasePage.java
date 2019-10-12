@@ -7,8 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.homework.Init;
 
-import java.util.function.Function;
-
 public abstract class BasePage {
     WebDriver driver;
     WebDriverWait wait;
@@ -25,23 +23,5 @@ public abstract class BasePage {
 
     public void waitAndClickElement(WebElement element) {
         waitForElement(element).click();
-    }
-
-    public void waitToChangeValueOnElement(WebElement element, String oldValue) {
-        wait.until(new Function<WebDriver, Object>() {
-            @Override
-            public Boolean apply(WebDriver webDriver) {
-                return !element.getAttribute("value").equals(oldValue);
-            }
-        });
-    }
-
-    public void waitToEqualValueOnElement(WebElement element, String newValue) {
-        wait.until(new Function<WebDriver, Object>() {
-            @Override
-            public Boolean apply(WebDriver webDriver) {
-                return element.getAttribute("value").contains(newValue);
-            }
-        });
     }
 }

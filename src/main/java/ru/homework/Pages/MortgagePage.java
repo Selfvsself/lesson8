@@ -1,9 +1,7 @@
 package ru.homework.Pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -24,11 +22,7 @@ public class MortgagePage extends BasePage {
     @FindBy(xpath = "//input[@id='creditTerm']")
     private WebElement creditTerm;
 
-    @FindBy(xpath = "//div[text()='Есть зарплатная карта Сбербанка']/following-sibling::div//label")
-    private WebElement switcherHaveCardSberbank;
-
-    @FindBy(xpath = "//div[text()='Есть возможность подтвердить доход справкой']")
-    private WebElement switcherConfimPaper;
+    private String xpathToRadioButton = "//div[text()='%s']/following-sibling::div//label";
 
     @FindBy(xpath = "//div[text()='Молодая семья']/following-sibling::div//label")
     private WebElement switcherYoungFamily;
@@ -59,32 +53,46 @@ public class MortgagePage extends BasePage {
     public void inputEstateCost(String value) {
         driver.switchTo().frame(0);
         waitForElement(estateCost);
-        estateCost.clear();
-        estateCost.sendKeys(value);
+        String oldValue = monthlyPayment.getText();
+        while (!estateCost.getAttribute("value").equals("")) {              //Удаляем старое значение из поля
+            estateCost.sendKeys(Keys.BACK_SPACE);
+        }
+        estateCost.sendKeys(value);                                             //Вводим новое значение
+        try {
+            waitToEqualValueOnElement(estateCost, formantString(value));        //Ждем пока значение в поле будет равно вводимому
+        } catch (org.openqa.selenium.TimeoutException e) {                      //Если не проходит ожидалка то вводим значение еще раз
+            while (!estateCost.getAttribute("value").equals("")) {
+                estateCost.sendKeys(Keys.BACK_SPACE);
+            }
+            estateCost.sendKeys(value);
+        }
+        waitChangeValue(monthlyPayment, oldValue);                              //Ждем пока поменяется значение о ежемесячном платеже
         driver.switchTo().defaultContent();
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.MILLISECONDS);
     }
 
     @Step("Вводим первоначальный взнос {value}")
     public void inputInitialFee(String value) {
         driver.switchTo().frame(0);
         waitForElement(initialFee);
-        oldTextValue = initialFee.getAttribute("value");
-        waitToChangeValueOnElement(initialFee, oldTextValue);
-        initialFee.clear();
+        String oldValue = monthlyPayment.getText();
+        while (!initialFee.getAttribute("value").equals("")) {
+            initialFee.sendKeys(Keys.BACK_SPACE);
+        }
         initialFee.sendKeys(value);
         try {
             waitToEqualValueOnElement(initialFee, formantString(value));
-        } catch (Throwable e) {
-            initialFee.clear();
+            waitChangeValue(monthlyPayment, oldValue);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            while (!initialFee.getAttribute("value").equals("")) {
+                initialFee.sendKeys(Keys.BACK_SPACE);
+            }
             initialFee.sendKeys(value);
         }
         driver.switchTo().defaultContent();
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.MILLISECONDS);
     }
 
-    private String formantString(String str) {
-        char[] chars = str.toCharArray();
+    private String formantString(String str) {                                          //Метод для сравнения значений введеных и которые нужно ввести
+        char[] chars = str.toCharArray();                                               //Метод преобразует строку 5308000 в 5 308 000
         ArrayList<Character> arrayList = new ArrayList<>();
         int index = 0;
         for (int i = chars.length - 1; i >= 0; i--) {
@@ -106,51 +114,48 @@ public class MortgagePage extends BasePage {
     public void inputCreditTerm(String value) {
         driver.switchTo().frame(0);
         waitForElement(creditTerm);
-        creditTerm.clear();
+        String oldValue = monthlyPayment.getText();
+        while (!creditTerm.getAttribute("value").equals("")) {
+            creditTerm.sendKeys(Keys.BACK_SPACE);
+        }
         creditTerm.sendKeys(value);
         try {
             waitToEqualValueOnElement(creditTerm, value);
-        } catch (Throwable e) {
-            creditTerm.clear();
+            waitChangeValue(monthlyPayment, oldValue);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            while (!creditTerm.getAttribute("value").equals("")) {
+                creditTerm.sendKeys(Keys.BACK_SPACE);
+            }
             creditTerm.sendKeys(value);
         }
         driver.switchTo().defaultContent();
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.MILLISECONDS);
     }
 
-    @Step("Кликаем на radiobutton Есть зарплатная карта Сбербанка")
-    public void switchHaveCardSberbank() {
+    @Step("Кликаем на radiobutton {name}")
+    public void switchRadionButton(String name) {
         driver.switchTo().frame(0);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();"
-                , creditTerm);
-        switcherHaveCardSberbank.click();
-        driver.switchTo().defaultContent();
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.MILLISECONDS);
-    }
-
-    @Step("Ожидаем появление пункта Есть возможность подтвердить справкой")
-    public void waitConfirmPaper() {
-        driver.switchTo().frame(0);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();"
-                , creditTerm);
-        try {
-            waitForElement(switcherConfimPaper);
-        } catch (Throwable e) {
-            switchHaveCardSberbank();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", creditTerm);
+        WebElement element = driver.findElement(By.xpath(String.format(xpathToRadioButton, name)));
+        boolean flagSwitch = element.getAttribute("class").contains("checked");
+        int attempt = 3;                                                                            //Количество максимальных попыток изменить radiobutton
+        String oldValue = monthlyPayment.getText();
+        while (flagSwitch == element.getAttribute("class").contains("checked")) {                  //До тех пока не поменятеся переключатель будем 3 раза пробовать его переключить
+            if (attempt < 0) {
+                break;
+            }
+            attempt--;
+            element.click();
         }
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.MILLISECONDS);
+        waitChangeValue(monthlyPayment, oldValue);
         driver.switchTo().defaultContent();
     }
 
-    @Step("Кликаем на radiobutton Молодая семья")
-    public void switchYoungFamily() {
+    @Step("Ожидаем появление пункта {name} c radiobutton")
+    public void waitRadioButton(String name) {
         driver.switchTo().frame(0);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();"
-                , creditTerm);
-        while (!switcherYoungFamily.getAttribute("class").contains("checked")) {
-            switcherYoungFamily.click();
-            driver.manage().timeouts().implicitlyWait(1000, TimeUnit.MILLISECONDS);
-        }
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", creditTerm);
+        WebElement element = driver.findElement(By.xpath(String.format(xpathToRadioButton, name)));
+        waitForElement(element);
         driver.switchTo().defaultContent();
     }
 
@@ -206,6 +211,26 @@ public class MortgagePage extends BasePage {
                 String value = element.getText();
                 driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
                 return element.getText().equals(value);
+            }
+        });
+    }
+
+    private void waitChangeValue(WebElement element, String value) {
+        wait.until(new Function<WebDriver, Object>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                waitToStopChangeElement(element);
+                return !element.getText().equals(value);
+            }
+        });
+    }
+
+
+    public void waitToEqualValueOnElement(WebElement element, String newValue) {
+        wait.until(new Function<WebDriver, Object>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                return element.getAttribute("value").contains(newValue);
             }
         });
     }

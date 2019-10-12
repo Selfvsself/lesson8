@@ -2,7 +2,9 @@ package ru.homework;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
+import org.junit.AfterClass;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.WebDriver;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
@@ -10,6 +12,13 @@ import org.junit.runner.RunWith;
         glue = "ru.homework.Pages.steps"
 )
 public class CucumberRunner {
+    static WebDriver driver = Init.getDriver();
+
+
+    @AfterClass
+    public static void close() {
+        driver.quit();
+    }
 
 }
 

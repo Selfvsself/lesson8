@@ -31,15 +31,9 @@ selenium
 11% - тут ошибка (специально)
  */
 
-import io.qameta.allure.junit4.DisplayName;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import ru.homework.Pages.MainPage;
-import ru.homework.Pages.MortgagePage;
-
 public class SberbankTest extends BaseTest {
 
+    /*
     @Test
     @Ignore
     @DisplayName("Тест для домашнего задания")
@@ -52,13 +46,14 @@ public class SberbankTest extends BaseTest {
         mortgagePage.inputEstateCost("5180000");
         mortgagePage.inputInitialFee("3058000");
         mortgagePage.inputCreditTerm("30");
-        mortgagePage.switchHaveCardSberbank();
-        mortgagePage.waitConfirmPaper();
-        mortgagePage.switchYoungFamily();
+        mortgagePage.switchRadionButton("Есть зарплатная карта Сбербанка");
+        mortgagePage.waitRadioButton("Есть возможность подтвердить доход справкой");
+        mortgagePage.switchRadionButton("Молодая семья");
 
         Assert.assertEquals(mortgagePage.getAmountOfCredit(), "2 122 000 \u20BD");
         Assert.assertEquals(mortgagePage.getMonthlyPayment(), "17 998 \u20BD");
         Assert.assertEquals(mortgagePage.getRequiredIncome(), "29 997 \u20BD");
         Assert.assertEquals(mortgagePage.getRate(), "11%");
     }
+     */
 }

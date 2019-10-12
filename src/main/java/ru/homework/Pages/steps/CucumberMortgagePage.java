@@ -22,19 +22,14 @@ public class CucumberMortgagePage {
         mortgagePage.inputCreditTerm(value);
     }
 
-    @Когда("нажимаем на переключатель есть зарплатная карта Сбербанка")
-    public void switchHaveCardSberbank() {
-        mortgagePage.switchHaveCardSberbank();
+    @Когда("нажимаем на переключатель \"(.+)\"")
+    public void switchHaveCardSberbank(String name) {
+        mortgagePage.switchRadionButton(name);
     }
 
-    @Когда("ждем появления пункта есть возможность подтвердить справкой")
-    public void waitConfirmPaper() {
-        mortgagePage.waitConfirmPaper();
-    }
-
-    @Когда("нажимаем на переключатель молодая семья")
-    public void switchYoungFamily() {
-        mortgagePage.switchYoungFamily();
+    @Когда("ждем появления пункта \"(.+)\"")
+    public void waitConfirmPaper(String name) {
+        mortgagePage.waitRadioButton(name);
     }
 
     @Когда("сравниваем поле сумма кредита со значением \"(.+)\"")
