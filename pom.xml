@@ -54,7 +54,7 @@
                     <properties>
                         <property>
                             <name>listener</name>
-                            <value>io.qameta.allure.junit4.AllureJunit4</value>
+                            <value>ru.homework.MyListener</value>
                         </property>
                     </properties>
                     <systemProperties>

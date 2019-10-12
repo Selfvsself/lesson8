@@ -16,11 +16,11 @@ public abstract class BasePage {
     public BasePage() {
         driver = Init.getDriver();
         PageFactory.initElements(driver, this);
-        wait = new WebDriverWait(driver, 10, 500);
+        wait = new WebDriverWait(driver, 5, 500);
     }
 
     public WebElement waitForElement(WebElement element) {
-        return wait.until(ExpectedConditions.elementToBeClickable(element));
+        return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     public void waitAndClickElement(WebElement element) {
@@ -44,5 +44,4 @@ public abstract class BasePage {
             }
         });
     }
-
 }

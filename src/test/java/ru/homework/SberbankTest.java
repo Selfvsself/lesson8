@@ -38,7 +38,7 @@ import org.junit.Test;
 import ru.homework.Pages.MainPage;
 import ru.homework.Pages.MortgagePage;
 
-public class SberbankTest {
+public class SberbankTest extends BaseTest {
 
     @Test
     @Ignore
