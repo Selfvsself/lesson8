@@ -10,8 +10,8 @@ import org.openqa.selenium.WebDriver;
 public class MyListener extends AllureJunit4 {
     @Override
     public void testFailure(Failure failure) throws Exception {
-        super.testFailure(failure);
         saveScreenshot(Init.getDriver());
+        super.testFailure(failure);
     }
 
 
