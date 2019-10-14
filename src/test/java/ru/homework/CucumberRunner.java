@@ -4,6 +4,7 @@ import io.cucumber.java.Before;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
@@ -14,6 +15,12 @@ import org.openqa.selenium.WebDriver;
 )
 public class CucumberRunner {
     static WebDriver driver = Init.getDriver();
+
+    @BeforeClass
+    static public void setupTimeout()
+    {
+        System.out.println("before class");
+    }
 
 }
 
