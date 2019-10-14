@@ -12,6 +12,8 @@ public abstract class BasePage {
     WebDriverWait wait;
 
     public BasePage() {
+        String browser = System.getProperty("browser", "chrome");
+        Init.setBrowser(browser);
         driver = Init.getDriver();
         PageFactory.initElements(driver, this);
         wait = new WebDriverWait(driver, 5, 500);

@@ -16,12 +16,6 @@ import org.openqa.selenium.WebDriver;
 public class CucumberRunner {
     static WebDriver driver = Init.getDriver();
 
-    @BeforeClass
-    static public void setupTimeout()
-    {
-        System.out.println("before class");
-    }
-
 }
 
 
