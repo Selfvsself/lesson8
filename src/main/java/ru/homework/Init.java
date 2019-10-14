@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class Init {
     private static WebDriver driver = null;
     public static Properties properties = TestProperties.getInstance().getProperties();
+    private static String browser = "chrome";
 
     public static WebDriver getDriver() {
         if (driver == null) {
@@ -18,8 +19,12 @@ public class Init {
         return driver;
     }
 
+    public static void setBrowser(String _browser) {
+        browser = _browser;
+    }
+
     private static void initialDriver() {
-        switch (properties.getProperty("browser")) {
+        switch (browser) {
             case "firefox":
                 System.setProperty("webdriver.gecko.driver", properties.getProperty("webdriver.gecko.driver"));
                 driver = new FirefoxDriver();

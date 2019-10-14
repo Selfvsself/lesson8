@@ -1,5 +1,6 @@
 package ru.homework;
 
+import io.cucumber.java.Before;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.AfterClass;
@@ -13,12 +14,6 @@ import org.openqa.selenium.WebDriver;
 )
 public class CucumberRunner {
     static WebDriver driver = Init.getDriver();
-
-
-    @AfterClass
-    public static void close() {
-        driver.quit();
-    }
 
 }
 
